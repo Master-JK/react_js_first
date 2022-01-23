@@ -4,57 +4,48 @@
   <body>
     <div id="root"></div>
   </body>
-  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
   <script type="text/babel">
+    function Btn({ text, changeValue }) {
+      return (
+        <button
+          onClick={changeValue}
+          style={{
+            backgroundColor: "tomato",
+            color: "white",
+            padding: "10px 20px",
+            border: 0,
+            borderRadius: 10,
+            fontSize: 10,
+          }}
+        >
+          {text}
+        </button>
+      );
+    }
+
+    Btn.propTypes = {
+      text: PropTypes.string,
+    };
+
+    // const MemorizedBtn = React.memo(Btn);
+
     function App() {
-      const [amount, setAmount] = React.useState("");
-      const [flipped, setFliped] = React.useState(false);
-
-      const onChange = (event) => {
-        setAmount(event.target.value);
-        console.log(event.target.value);
+      const [value, setValue] = React.useState("Save Changes");
+      const changeValue = () => {
+        setValue("Revert Change");
       };
-      const Reset = (event) => {
-        setAmount("");
-      };
-      const onFlip = () => {
-        Reset();
-        setFliped((current) => !current);
-      };
-
       return (
         <div>
-          <h1>Super Converter</h1>
-          <label htmlfor="minutes">Minutes</label>
-          <div>
-            <input
-              value={!flipped ? amount : Math.round(amount * 60)}
-              id="minutes"
-              type="number"
-              placeholder="Minutes"
-              onChange={onChange}
-              disabled={flipped}
-            />
-          </div>
-          <h4>You want to conver {amount}</h4>
-          <label htmlfor="hours">Hours</label>
-          <div>
-            <input
-              value={flipped ? amount : Math.round(amount / 60)}
-              id="hours"
-              type="number"
-              placeholder="Hours"
-              disabled={!flipped}
-              onChange={onChange}
-            />
-          </div>
-          <button onClick={Reset}>Reset</button>
-          <button onClick={onFlip}>Flip</button>
+          <Btn text={value} changeValue={changeValue} />
+          <Btn text="Continue" />
         </div>
       );
     }
+
     const root = document.querySelector("#root");
     ReactDOM.render(<App />, root);
   </script>
